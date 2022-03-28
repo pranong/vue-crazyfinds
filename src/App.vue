@@ -111,15 +111,6 @@
       </v-badge>
       <!-- Login details -->
     </v-app-bar>
-    <v-row class="mt-10">
-      <v-col>
-        a
-        <MarqueeText>
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-          nonumy eirmod tempor invidunt ut labore et dolore magna.
-        </MarqueeText>
-      </v-col>
-    </v-row>
     <!-- Body -->
     <v-main>
       <v-container class="pt-4">

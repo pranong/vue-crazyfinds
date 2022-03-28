@@ -1,18 +1,10 @@
 <template>
   <v-row>
     <v-col cols="12" class="text-center text-h2 text-b">
-      <marquee-text>
-        <span class="badge badge-success ml-2">0,38%</span> ATX
-        <span class="badge badge-danger ml-2">0,16%</span> DAX
-        <span class="badge badge-success ml-2">0,04%</span> TecDax
-        <span class="badge badge-danger ml-2">0,19%</span> MDAX
-        <span class="badge badge-success ml-2">0,03%</span> ESTX50
-        <span class="badge badge-info ml-2">0,00%</span> NIKKEI
-        <span class="badge badge-success ml-2">0,03%</span> EUR/CHF
-      </marquee-text>
+      TEE
     </v-col>
     <v-col
-      v-for="index in 12"
+      v-for="(row, index) in rows"
       lg="3"
       :key="index"
       sm="6"
@@ -22,37 +14,44 @@
       <v-container
         class="pa-0 productItem"
         cols="12"
-        @click="selectItem(index)"
+        @click="selectItem(row.id)"
       >
-        <v-badge color="error" tile overlap offset-x="29" offset-y="25">
+        <v-badge color="#BDBDBD" tile overlap offset-x="29" offset-y="25">
           <template v-slot:badge> Sale </template>
-          <v-badge tile overlap offset-x="20" offset-y="45">
-            <template v-slot:badge> XL </template>
-            <img
-              src="../assets/t.jpg"
-              alt="Vuetify.js"
+          <v-carousel hide-delimiters :width="isMobile ? 150 : 250" :height="isMobile ? 150 : 250">
+            <v-carousel-item
+              v-for="(item,i) in row.images"
+              :key="i"
+              :src="item.src"
+              :height="isMobile ? 150 : 250"
               :width="isMobile ? 150 : 250"
-            />
-          </v-badge>
+            ></v-carousel-item>
+          </v-carousel>
         </v-badge>
-        <v-col
-          class="text-caption pa-0"
+        <v-row class="pl-5 pr-5 pt-1">
+          <v-col
+          cols="10"
+          class="text-caption text-left"
           style="line-height: 140%; text-transform: uppercase"
         >
-          <b>Vintage Blink-182</b><br />
-          <em>$900</em>
+          <b>{{row.name}}</b><br />
+          <em>${{row.price}}</em>
         </v-col>
+        <v-col cols="2" class="text-body2">
+          XL
+        </v-col>
+        </v-row>
       </v-container>
     </v-col>
-    <v-col cols="12" class="text-center mt-5 mb-10">
+    <!-- <v-col cols="12" class="text-center mt-5 mb-10">
       <v-btn class="mx-2" fab disabled>
-        <v-icon dark> mdi-chevron-left </v-icon>
+        <v-icon dark @click="changePage('left')"> mdi-chevron-left </v-icon>
       </v-btn>
-      1
+      {{page}}
       <v-btn class="mx-2" fab>
-        <v-icon dark> mdi-chevron-right </v-icon>
-      </v-btn></v-col
-    >
+        <v-icon dark @click="changePage('right')"> mdi-chevron-right </v-icon>
+      </v-btn>
+    </v-col> -->
     <v-col cols="auto">
       <v-dialog transition="dialog-bottom-transition" max-width="600">
         <template v-slot:activator="{ on, attrs }">
@@ -81,11 +80,37 @@
         </template>
       </v-dialog>
     </v-col>
+    <v-col cols="12" class="mt-15" id="prodRow">
+      
+    </v-col>
   </v-row>
 </template>
 
 <script>
 import MarqueeText from "vue-marquee-text-component";
+// import db from "../lib/db"
+
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, onValue } from "firebase/database";
+// TODO: Replace with your app's Firebase project configuration
+    const firebaseConfig = {
+        apiKey: 'AIzaSyA-ECAo2IzfT30j51vu4I5vxa1IrZ4QMu0',
+      authDomain: 'vue-crazyfinds.firebaseapp.com',
+      databaseURL: 'https://vue-crazyfinds-default-rtdb.firebaseio.com',
+      projectId: 'vue-crazyfinds',
+      storageBucket: 'vue-crazyfinds.appspot.com',
+      messagingSenderId: '782007552940',
+      appId: '1:782007552940:web:f06c8c6e20595952708809',
+      measurementId: 'G-B4E62WEYX5',
+    };
+
+    const app = initializeApp(firebaseConfig);
+
+    // Get a reference to the database service
+    const database = getDatabase(app);
+
+
+
 export default {
   name: "productPage",
   components: {
@@ -94,6 +119,9 @@ export default {
   data() {
     return {
       drawer: false,
+      rows: [],
+      scrollItem: 12,
+      masterRows: [],
       items: [
         {
           icon: "mdi-home",
@@ -107,6 +135,16 @@ export default {
         },
       ],
     };
+  },
+  mounted() {
+    this.scroll()
+  },
+  created() {
+    const starCountRef = ref(database, 'product/')
+    onValue(starCountRef, (snapshot) => {
+      const data = snapshot.val()
+      this.setData(data)
+    });
   },
   computed: {
     isMobile() {
@@ -122,8 +160,49 @@ export default {
     },
   },
   methods: {
+    scroll () {
+      window.onscroll = () => {
+        let scrolledTo = document.querySelector('#prodRow')
+
+        if (scrolledTo && this.isScrolledIntoView(scrolledTo)) {
+          this.scrollItem = this.scrollItem + 12
+          this.rows = this.masterRows.slice(0, this.scrollItem)
+        }
+      }
+    },
+    isScrolledIntoView (el) {
+      let rect = el.getBoundingClientRect()
+      let elemTop = rect.top
+      let elemBottom = rect.bottom
+
+      let isVisible = elemTop < window.innerHeight && elemBottom >= 0
+      return isVisible
+    },
     async selectItem(id) {
       this.$router.push({ name: "details", params: { id } });
+    },
+    async setData(data) {
+      for (let id in data) {
+        data[id].images = JSON.parse(data[id].imgs)
+        this.masterRows.push(data[id])
+      }
+      this.rows = this.masterRows.slice(0, 12)
+      console.log('data', this.rows)
+    },
+    async changePage(at) {
+      let from = 0
+      let to = 9
+      if (at === 'right') {
+        this.page++
+      } else {
+        this.page--
+      }
+      from = (to * this.page) - 8
+      to = to * this.page
+      if (this.page === 1) {
+        from = 0
+      }
+      this.rows = this.masterRows.slice(from, to)
     },
   },
 };
