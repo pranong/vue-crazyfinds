@@ -1,6 +1,16 @@
 <template>
   <v-row>
-    <v-col cols="12" class="text-center text-h2 text-b"> T-Shirt </v-col>
+    <v-col cols="12" class="text-center text-h2 text-b">
+      <marquee-text>
+        <span class="badge badge-success ml-2">0,38%</span> ATX
+        <span class="badge badge-danger ml-2">0,16%</span> DAX
+        <span class="badge badge-success ml-2">0,04%</span> TecDax
+        <span class="badge badge-danger ml-2">0,19%</span> MDAX
+        <span class="badge badge-success ml-2">0,03%</span> ESTX50
+        <span class="badge badge-info ml-2">0,00%</span> NIKKEI
+        <span class="badge badge-success ml-2">0,03%</span> EUR/CHF
+      </marquee-text>
+    </v-col>
     <v-col
       v-for="index in 12"
       lg="3"
@@ -9,7 +19,11 @@
       md="4"
       class="text-center"
     >
-      <v-container class="pa-0 productItem" cols="12" @click="selectItem(1)">
+      <v-container
+        class="pa-0 productItem"
+        cols="12"
+        @click="selectItem(index)"
+      >
         <v-badge color="error" tile overlap offset-x="29" offset-y="25">
           <template v-slot:badge> Sale </template>
           <v-badge tile overlap offset-x="20" offset-y="45">
@@ -71,8 +85,12 @@
 </template>
 
 <script>
+import MarqueeText from "vue-marquee-text-component";
 export default {
   name: "productPage",
+  components: {
+    MarqueeText,
+  },
   data() {
     return {
       drawer: false,
