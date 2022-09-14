@@ -75,13 +75,13 @@
 </template>
 
 <script>
-import HelloWorld from "../components/HelloWorld";
+import Home from "../components/Home";
 
 export default {
   name: "Home",
 
   components: {
-    HelloWorld,
+    Home,
   },
   created() {
     console.log("$route.params.id", this.$route.params.id);

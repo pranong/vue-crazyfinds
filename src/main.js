@@ -6,9 +6,9 @@ import vuetify from './plugins/vuetify'
 import { rtdbPlugin } from 'vuefire'
 
 Vue.use(rtdbPlugin)
-// import MarqueeText from "vue-marquee-text-component";
+import MarqueeText from "./components/MarqueeText.vue";
 
-// Vue.component("marquee-text", MarqueeText);
+Vue.component("marquee-text", MarqueeText);
 
 Vue.config.productionTip = false
 

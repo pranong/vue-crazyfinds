@@ -1,7 +1,7 @@
 <template>
   <v-row>
-    <v-col cols="12" class="text-center text-h2 text-b">
-      TEE
+    <v-col cols="12" class="text-b">
+      <v-breadcrumbs :items="breadcrumbsItems"></v-breadcrumbs>
     </v-col>
     <v-col
       v-for="(row, index) in rows"
@@ -25,6 +25,7 @@
               :src="item.src"
               :height="isMobile ? 150 : 250"
               :width="isMobile ? 150 : 250"
+              eager
             ></v-carousel-item>
           </v-carousel>
         </v-badge>
@@ -122,6 +123,23 @@ export default {
       rows: [],
       scrollItem: 12,
       masterRows: [],
+      breadcrumbsItems: [
+        {
+          text: 'Dashboard',
+          disabled: false,
+          href: 'breadcrumbs_dashboard',
+        },
+        {
+          text: 'Link 1',
+          disabled: false,
+          href: 'breadcrumbs_link_1',
+        },
+        {
+          text: 'Link 2',
+          disabled: true,
+          href: 'breadcrumbs_link_2',
+        },
+      ],
       items: [
         {
           icon: "mdi-home",
