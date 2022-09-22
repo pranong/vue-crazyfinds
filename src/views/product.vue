@@ -158,6 +158,7 @@ export default {
     this.scroll()
   },
   created() {
+    window.scrollTo(0, 0)
     const starCountRef = ref(database, 'product/')
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val()

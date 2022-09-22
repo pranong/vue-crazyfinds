@@ -203,11 +203,13 @@
       }
     },
     created() {
+      window.scrollTo(0, 0)
       const starCountRef = ref(database, 'product/')
         onValue(starCountRef, (snapshot) => {
           const data = snapshot.val()
           this.setData(data)
       });
+      this.getApis()
     },
     computed: {
       isMobile() {
@@ -234,6 +236,10 @@
       },
       async selectItem(id) {
         this.$router.push({ name: "details", params: { id } });
+      },
+      async getApis() {
+        let data = await this.$http.get('/person/create-person')
+        console.log('api', data)
       },
     }
   }

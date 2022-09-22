@@ -5,7 +5,16 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import { rtdbPlugin } from 'vuefire'
 
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+const request = axios.create({
+	baseURL: `http://localhost:8080/api`,
+})
+Vue.use(VueAxios, request)
+
 Vue.use(rtdbPlugin)
+
 import MarqueeText from "./components/MarqueeText.vue";
 
 Vue.component("marquee-text", MarqueeText);
