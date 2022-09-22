@@ -63,10 +63,10 @@
                 style="line-height: 140%; text-transform: uppercase"
               >
                 <b>{{row.name}}</b><br />
-                <em>${{row.price}}</em>
+                <em>${{row.priceA}}</em>
               </v-col>
               <v-col cols="2" class="text-body2">
-                XL
+                {{row.size}}
               </v-col>
             </v-row>
           </v-container>
@@ -103,7 +103,7 @@
           </h1> -->
       </v-col>
       <v-col
-        v-for="(row, index) in rows"
+        v-for="(row, index) in categoryItem"
         :key="index"
         lg="3"
         sm="6"
@@ -133,11 +133,7 @@
               class="text-caption text-left"
               style="line-height: 140%; text-transform: uppercase"
             >
-              <b>{{row.name}}</b><br />
-              <em>${{row.price}}</em>
-            </v-col>
-            <v-col cols="2" class="text-body2">
-              XL
+              <center><b>{{row.name}}</b><br /></center>
             </v-col>
           </v-row>
         </v-container>
@@ -159,24 +155,6 @@
 
 <script>
   import MarqueeText from "../components/MarqueeText.vue";
-  import { initializeApp } from 'firebase/app';
-  import { getDatabase, ref, onValue } from "firebase/database";
-  // TODO: Replace with your app's Firebase project configuration
-    const firebaseConfig = {
-        apiKey: 'AIzaSyA-ECAo2IzfT30j51vu4I5vxa1IrZ4QMu0',
-      authDomain: 'vue-crazyfinds.firebaseapp.com',
-      databaseURL: 'https://vue-crazyfinds-default-rtdb.firebaseio.com',
-      projectId: 'vue-crazyfinds',
-      storageBucket: 'vue-crazyfinds.appspot.com',
-      messagingSenderId: '782007552940',
-      appId: '1:782007552940:web:f06c8c6e20595952708809',
-      measurementId: 'G-B4E62WEYX5',
-    };
-
-    const app = initializeApp(firebaseConfig);
-
-    // Get a reference to the database service
-    const database = getDatabase(app);
   export default {
     name: 'Home',
     components: {
@@ -184,31 +162,13 @@
     },
     data() {
       return {
-        carouselItem: [
-            {
-              src: 'https://cdn.shopify.com/s/files/1/0016/4013/6813/files/CedarPark_PO_Desktop_2380x770_b01e8de4-5409-478d-9d68-ad40727158e0_1512x.jpg?v=1662665175',
-            },
-            {
-              src: 'https://cdn.shopify.com/s/files/1/0016/4013/6813/files/CedarPark_PO_Desktop_2380x770_b01e8de4-5409-478d-9d68-ad40727158e0_1512x.jpg?v=1662665175',
-            },
-            {
-              src: 'https://cdn.shopify.com/s/files/1/0016/4013/6813/files/CedarPark_PO_Desktop_2380x770_b01e8de4-5409-478d-9d68-ad40727158e0_1512x.jpg?v=1662665175',
-            },
-            {
-              src: 'https://cdn.shopify.com/s/files/1/0016/4013/6813/files/CedarPark_PO_Desktop_2380x770_b01e8de4-5409-478d-9d68-ad40727158e0_1512x.jpg?v=1662665175',
-            },
-          ],
+        carouselItem: [],
         rows: [],
         masterRows: [],
       }
     },
     created() {
       window.scrollTo(0, 0)
-      const starCountRef = ref(database, 'product/')
-        onValue(starCountRef, (snapshot) => {
-          const data = snapshot.val()
-          this.setData(data)
-      });
       this.getApis()
     },
     computed: {
@@ -226,11 +186,9 @@
     },
     methods: {
       setData (data) {
-        console.log(data)
-        for (let id in data) {
-          data[id].images = JSON.parse(data[id].imgs)
-          this.masterRows.push(data[id])
-        }
+        console.log('==>', data)
+        data.map(x => x.images = JSON.parse(x.images))
+        this.masterRows = data
         this.rows = this.masterRows.slice(0, 4)
         console.log('this.rows', this.rows)
       },
@@ -238,8 +196,17 @@
         this.$router.push({ name: "details", params: { id } });
       },
       async getApis() {
-        let data = await this.$http.get('/person/create-person')
-        console.log('api', data)
+        try {
+          let res = await this.$http.get('/stock/get-stock')
+          this.setData(res.data.items)
+          let { data } = await this.$http.post('/setting/get-setting',{ tableCode: ['CAROUSEL', 'CATEGORY']})
+          console.log(data.rows)
+          this.categoryItem = JSON.parse(data.rows[0].datas)
+          this.carouselItem = JSON.parse(data.rows[1].datas)
+          console.log('data', data)
+        } catch (error) {
+          console.log('ERR', error)
+        }
       },
     }
   }
