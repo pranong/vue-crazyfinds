@@ -189,11 +189,8 @@ export default {
       try {
         let res = await this.$http.get('/stock/get-stock')
         this.setData(res.data.items)
-        let { data } = await this.$http.post('/setting/get-setting',{ tableCode: ['CAROUSEL', 'CATEGORY']})
-        console.log(data.rows)
-        this.categoryItem = JSON.parse(data.rows[0].datas)
-        this.carouselItem = JSON.parse(data.rows[1].datas)
-        console.log('data', data)
+        this.categoryItem = this.$store.state.settings.categoryItem
+        this.carouselItem = this.$store.state.settings.carouselItem
       } catch (error) {
         console.log('ERR', error)
       } finally {

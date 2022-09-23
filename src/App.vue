@@ -211,6 +211,10 @@ export default {
       title: "Crazyfinds",
     };
   },
+  async created() {
+    // set setting to store
+    await this.$store.dispatch('setSettings')
+  },
   computed: {
     isMobile() {
       if (
