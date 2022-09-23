@@ -49,7 +49,7 @@
             vertical
           ></v-divider>
 
-          <router-link v-if="!isMobile" to="/product" style="padding-left: 5px;">Shop</router-link>
+          <router-link v-if="!isMobile" to="/product/A" style="padding-left: 5px;">Shop</router-link>
           <v-spacer />
           
           <!-- search -->
@@ -108,11 +108,7 @@
 
                     <v-list-item-action>
                       <router-link to="/product">
-                        <v-btn
-                          :class="fav ? 'red--text' : ''"
-                          icon
-                          @click="fav = !fav"
-                        >
+                        <v-btn>
                           <v-icon>mdi-heart</v-icon>
                         </v-btn>
                       </router-link>
@@ -125,14 +121,14 @@
                 <v-list>
                   <v-list-item>
                     <v-list-item-action>
-                      <v-switch v-model="message" color="purple"></v-switch>
+                      <v-switch color="purple"></v-switch>
                     </v-list-item-action>
                     <v-list-item-title>Enable messages</v-list-item-title>
                   </v-list-item>
 
                   <v-list-item>
                     <v-list-item-action>
-                      <v-switch v-model="hints" color="purple"></v-switch>
+                      <v-switch color="purple"></v-switch>
                     </v-list-item-action>
                     <v-list-item-title>Enable hints</v-list-item-title>
                   </v-list-item>

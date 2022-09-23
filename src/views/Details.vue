@@ -9,7 +9,7 @@
           height="200"
         />
       </v-col>
-      {{ $route.params.id }}
+      {{ $route.params }}
 
       <v-col class="mb-4">
         <h1 class="display-2 font-weight-bold mb-3">Welcome to Vuetify</h1>
@@ -75,16 +75,20 @@
 </template>
 
 <script>
-import Home from "../components/Home";
+import Home from '../components/Home';
 
 export default {
-  name: "Home",
+  name: 'Home',
 
   components: {
     Home,
   },
   created() {
-    console.log("$route.params.id", this.$route.params.id);
+    console.log('details');
+    // console.log("$route.params.id", this.$route.params.id);
+  },
+  activated() {
+    console.log('details activated');
   },
   methods: {},
 };

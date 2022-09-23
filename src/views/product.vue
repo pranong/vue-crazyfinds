@@ -1,121 +1,102 @@
 <template>
-  <v-row>
-    <v-col cols="12" class="text-b">
-      <v-breadcrumbs :items="breadcrumbsItems"></v-breadcrumbs>
-    </v-col>
-    <v-col
-      v-for="(row, index) in rows"
-      lg="3"
-      :key="index"
-      sm="6"
-      md="4"
-      class="text-center"
-    >
-      <v-container
-        class="pa-0 productItem"
-        cols="12"
-        @click="selectItem(row.id)"
+  <v-container>
+    <loader v-show="busy"/>
+    <v-row>
+      <v-col cols="12" class="text-b">
+        <v-breadcrumbs :items="breadcrumbsItems"></v-breadcrumbs>
+      </v-col>
+      <v-col
+        v-for="(row, index) in rows"
+        lg="3"
+        :key="index"
+        sm="6"
+        md="4"
+        class="text-center"
       >
-        <v-badge color="#BDBDBD" tile overlap offset-x="29" offset-y="25">
-          <template v-slot:badge> Sale </template>
-          <v-carousel hide-delimiters :width="isMobile ? 150 : 250" :height="isMobile ? 150 : 250">
-            <v-carousel-item
-              v-for="(item,i) in row.images"
-              :key="i"
-              :src="item.src"
-              :height="isMobile ? 150 : 250"
-              :width="isMobile ? 150 : 250"
-              eager
-            ></v-carousel-item>
-          </v-carousel>
-        </v-badge>
-        <v-row class="pl-5 pr-5 pt-1">
-          <v-col
-          cols="10"
-          class="text-caption text-left"
-          style="line-height: 140%; text-transform: uppercase"
+        <v-container
+          class="pa-0 productItem"
+          cols="12"
+          @click="selectItem(row.id)"
         >
-          <b>{{row.name}}</b><br />
-          <em>${{row.price}}</em>
-        </v-col>
-        <v-col cols="2" class="text-body2">
-          XL
-        </v-col>
-        </v-row>
-      </v-container>
-    </v-col>
-    <!-- <v-col cols="12" class="text-center mt-5 mb-10">
-      <v-btn class="mx-2" fab disabled>
-        <v-icon dark @click="changePage('left')"> mdi-chevron-left </v-icon>
-      </v-btn>
-      {{page}}
-      <v-btn class="mx-2" fab>
-        <v-icon dark @click="changePage('right')"> mdi-chevron-right </v-icon>
-      </v-btn>
-    </v-col> -->
-    <v-col cols="auto">
-      <v-dialog transition="dialog-bottom-transition" max-width="600">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            fab
-            fixed
-            right
-            bottom
-            x-large
-            v-bind="attrs"
-            v-on="on"
-            :style="{ bottom: '7%' }"
+          <v-badge color="#BDBDBD" tile overlap offset-x="29" offset-y="25">
+            <template v-slot:badge> Sale </template>
+            <v-carousel hide-delimiters :width="isMobile ? 150 : 250" :height="isMobile ? 150 : 250">
+              <v-carousel-item
+                v-for="(item,i) in row.images"
+                :key="i"
+                :src="item.src"
+                :height="isMobile ? 150 : 250"
+                :width="isMobile ? 150 : 250"
+                eager
+              ></v-carousel-item>
+            </v-carousel>
+          </v-badge>
+          <v-row class="pl-5 pr-5 pt-1">
+            <v-col
+            cols="10"
+            class="text-caption text-left"
+            style="line-height: 140%; text-transform: uppercase"
           >
-            <v-icon>mdi-filter</v-icon>
-          </v-btn>
-        </template>
-        <template v-slot:default="dialog">
-          <v-card>
-            <v-card-text>
-              <div class="text-h3 pa-12">Filter!</div>
-            </v-card-text>
-            <v-card-actions class="justify-end">
-              <v-btn text @click="dialog.value = false">DONE</v-btn>
-            </v-card-actions>
-          </v-card>
-        </template>
-      </v-dialog>
-    </v-col>
-    <v-col cols="12" class="mt-15" id="prodRow">
-      
-    </v-col>
-  </v-row>
+            <b>{{row.name}}</b><br />
+            <em>${{row.priceA}}</em>
+          </v-col>
+          <v-col cols="2" class="text-body2">
+            {{row.size}}
+          </v-col>
+          </v-row>
+        </v-container>
+      </v-col>
+      <!-- <v-col cols="12" class="text-center mt-5 mb-10">
+        <v-btn class="mx-2" fab disabled>
+          <v-icon dark @click="changePage('left')"> mdi-chevron-left </v-icon>
+        </v-btn>
+        {{page}}
+        <v-btn class="mx-2" fab>
+          <v-icon dark @click="changePage('right')"> mdi-chevron-right </v-icon>
+        </v-btn>
+      </v-col> -->
+      <v-col cols="auto">
+        <v-dialog transition="dialog-bottom-transition" max-width="600">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              fab
+              fixed
+              right
+              bottom
+              x-large
+              v-bind="attrs"
+              v-on="on"
+              :style="{ bottom: '7%' }"
+            >
+              <v-icon>mdi-filter</v-icon>
+            </v-btn>
+          </template>
+          <template v-slot:default="dialog">
+            <v-card>
+              <v-card-text>
+                <div class="text-h3 pa-12">Filter!</div>
+              </v-card-text>
+              <v-card-actions class="justify-end">
+                <v-btn text @click="dialog.value = false">DONE</v-btn>
+              </v-card-actions>
+            </v-card>
+          </template>
+        </v-dialog>
+      </v-col>
+      <v-col cols="12" class="mt-15" id="prodRow">
+        
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import MarqueeText from "vue-marquee-text-component";
-// import db from "../lib/db"
-
-import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, onValue } from "firebase/database";
-// TODO: Replace with your app's Firebase project configuration
-    const firebaseConfig = {
-        apiKey: 'AIzaSyA-ECAo2IzfT30j51vu4I5vxa1IrZ4QMu0',
-      authDomain: 'vue-crazyfinds.firebaseapp.com',
-      databaseURL: 'https://vue-crazyfinds-default-rtdb.firebaseio.com',
-      projectId: 'vue-crazyfinds',
-      storageBucket: 'vue-crazyfinds.appspot.com',
-      messagingSenderId: '782007552940',
-      appId: '1:782007552940:web:f06c8c6e20595952708809',
-      measurementId: 'G-B4E62WEYX5',
-    };
-
-    const app = initializeApp(firebaseConfig);
-
-    // Get a reference to the database service
-    const database = getDatabase(app);
-
-
+import loader from '../components/loader.vue'
 
 export default {
   name: "productPage",
   components: {
-    MarqueeText,
+    loader,
   },
   data() {
     return {
@@ -123,6 +104,7 @@ export default {
       rows: [],
       scrollItem: 12,
       masterRows: [],
+      busy: false,
       breadcrumbsItems: [
         {
           text: 'Dashboard',
@@ -157,13 +139,8 @@ export default {
   mounted() {
     this.scroll()
   },
-  created() {
-    window.scrollTo(0, 0)
-    const starCountRef = ref(database, 'product/')
-    onValue(starCountRef, (snapshot) => {
-      const data = snapshot.val()
-      this.setData(data)
-    });
+  async created() {
+    await this.getApis()
   },
   computed: {
     isMobile() {
@@ -201,12 +178,27 @@ export default {
       this.$router.push({ name: "details", params: { id } });
     },
     async setData(data) {
-      for (let id in data) {
-        data[id].images = JSON.parse(data[id].imgs)
-        this.masterRows.push(data[id])
+      console.log('==>', data);
+      data.map((x) => (x.images = JSON.parse(x.images)));
+      this.masterRows = data;
+      this.rows = this.masterRows.slice(0, 12);
+      console.log('this.rows', this.rows);
+    },
+    async getApis() {
+      this.busy = true
+      try {
+        let res = await this.$http.get('/stock/get-stock')
+        this.setData(res.data.items)
+        let { data } = await this.$http.post('/setting/get-setting',{ tableCode: ['CAROUSEL', 'CATEGORY']})
+        console.log(data.rows)
+        this.categoryItem = JSON.parse(data.rows[0].datas)
+        this.carouselItem = JSON.parse(data.rows[1].datas)
+        console.log('data', data)
+      } catch (error) {
+        console.log('ERR', error)
+      } finally {
+        this.busy = false
       }
-      this.rows = this.masterRows.slice(0, 12)
-      console.log('data', this.rows)
     },
     async changePage(at) {
       let from = 0

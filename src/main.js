@@ -1,29 +1,29 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import vuetify from './plugins/vuetify'
-import { rtdbPlugin } from 'vuefire'
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import vuetify from './plugins/vuetify';
+import { rtdbPlugin } from 'vuefire';
 
-import axios from 'axios'
-import VueAxios from 'vue-axios'
+import axios from 'axios';
+import VueAxios from 'vue-axios';
 
 const request = axios.create({
 	baseURL: process.env.VUE_APP_API_PATH || `http://localhost:8081/api`,
 })
 Vue.use(VueAxios, request)
 
-Vue.use(rtdbPlugin)
+Vue.use(rtdbPlugin);
 
-import MarqueeText from "./components/MarqueeText.vue";
+import MarqueeText from './components/MarqueeText.vue';
 
-Vue.component("marquee-text", MarqueeText);
+Vue.component('marquee-text', MarqueeText);
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
-	router,
-	store,
-	vuetify,
-	render: (h) => h(App),
-}).$mount('#app')
+  router,
+  store,
+  vuetify,
+  render: (h) => h(App),
+}).$mount('#app');
