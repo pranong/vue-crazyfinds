@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <loader v-show="busy"/>
     <v-row class="text-center">
       <v-col cols="12">
         <v-img
@@ -75,21 +76,39 @@
 </template>
 
 <script>
-import Home from '../components/Home';
+import loader from '../components/loader.vue'
 
 export default {
-  name: 'Home',
+  name: 'Details',
 
   components: {
-    Home,
+    loader
+  },
+  data() {
+    return {
+      busy: false,
+    };
   },
   created() {
     console.log('details');
+    this.getStock(this.$route.params.stkId);
     // console.log("$route.params.id", this.$route.params.id);
   },
   activated() {
     console.log('details activated');
   },
-  methods: {},
+  methods: {
+    async getStock(stkId){
+      this.busy = true
+      try {
+        let res = await this.$http.get('/stock/get-stock')
+        console.log('res', res)
+      } catch (error) {
+        
+      } finally {
+        this.busy = false
+      }
+    }
+  },
 };
 </script>

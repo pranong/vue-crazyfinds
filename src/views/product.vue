@@ -16,20 +16,21 @@
         <v-container
           class="pa-0 productItem"
           cols="12"
-          @click="selectItem(row.id)"
         >
           <v-badge color="#BDBDBD" tile overlap offset-x="29" offset-y="25">
             <template v-slot:badge> Sale </template>
-            <v-carousel hide-delimiters :width="isMobile ? 150 : 250" :height="isMobile ? 150 : 250">
-              <v-carousel-item
-                v-for="(item,i) in row.images"
-                :key="i"
-                :src="item.src"
-                :height="isMobile ? 150 : 250"
-                :width="isMobile ? 150 : 250"
-                eager
-              ></v-carousel-item>
-            </v-carousel>
+            <router-link :to="`../details/${row.stkId}`">
+              <v-carousel hide-delimiters :width="isMobile ? 150 : 250" :height="isMobile ? 150 : 250">
+                <v-carousel-item
+                  v-for="(item,i) in row.images"
+                  :key="i"
+                  :src="item.src"
+                  :height="isMobile ? 150 : 250"
+                  :width="isMobile ? 150 : 250"
+                  eager
+                ></v-carousel-item>
+              </v-carousel>
+            </router-link>
           </v-badge>
           <v-row class="pl-5 pr-5 pt-1">
             <v-col
