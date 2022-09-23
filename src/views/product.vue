@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <loader v-show="busy"/>
+    <loader v-show="busy" />
     <v-row>
       <v-col cols="12" class="text-b">
         <v-breadcrumbs :items="breadcrumbsItems"></v-breadcrumbs>
@@ -13,16 +13,25 @@
         md="4"
         class="text-center"
       >
-        <v-container
-          class="pa-0 productItem"
-          cols="12"
-        >
-          <v-badge color="#BDBDBD" tile overlap offset-x="29" offset-y="25">
-            <template v-slot:badge> Sale </template>
+        <v-container class="pa-0 productItem" cols="12">
+          <v-badge
+            :color="row.badgeColor"
+            tile
+            overlap
+            offset-x="29"
+            offset-y="25"
+          >
+            <template v-if="row.badgeStatus" v-slot:badge>
+              {{ row.badgeStatus }}
+            </template>
             <router-link :to="`../details/${row.stkId}`">
-              <v-carousel hide-delimiters :width="isMobile ? 150 : 250" :height="isMobile ? 150 : 250">
+              <v-carousel
+                hide-delimiters
+                :width="isMobile ? 150 : 250"
+                :height="isMobile ? 150 : 250"
+              >
                 <v-carousel-item
-                  v-for="(item,i) in row.images"
+                  v-for="(item, i) in row.images"
                   :key="i"
                   :src="item.src"
                   :height="isMobile ? 150 : 250"
@@ -34,16 +43,17 @@
           </v-badge>
           <v-row class="pl-5 pr-5 pt-1">
             <v-col
-            cols="10"
-            class="text-caption text-left"
-            style="line-height: 140%; text-transform: uppercase"
-          >
-            <b>{{row.name}}</b><br />
-            <em>${{row.priceA}}</em>
-          </v-col>
-          <v-col cols="2" class="text-body2">
-            {{row.size}}
-          </v-col>
+              cols="10"
+              class="text-caption text-left"
+              style="line-height: 140%; text-transform: uppercase"
+            >
+              <b>{{ row.name }}</b
+              ><br />
+              <em>${{ row.priceA }}</em>
+            </v-col>
+            <v-col cols="2" class="text-body2">
+              {{ row.size }}
+            </v-col>
           </v-row>
         </v-container>
       </v-col>
@@ -84,18 +94,16 @@
           </template>
         </v-dialog>
       </v-col>
-      <v-col cols="12" class="mt-15" id="prodRow">
-        
-      </v-col>
+      <v-col cols="12" class="mt-15" id="prodRow"> </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import loader from '../components/loader.vue'
+import loader from '../components/loader.vue';
 
 export default {
-  name: "productPage",
+  name: 'productPage',
   components: {
     loader,
   },
@@ -125,23 +133,23 @@ export default {
       ],
       items: [
         {
-          icon: "mdi-home",
-          title: "Home",
-          to: "/",
+          icon: 'mdi-home',
+          title: 'Home',
+          to: '/',
         },
         {
-          icon: "mdi-chart-bubble",
-          title: "Inspire",
-          to: "/inspire",
+          icon: 'mdi-chart-bubble',
+          title: 'Inspire',
+          to: '/inspire',
         },
       ],
     };
   },
   mounted() {
-    this.scroll()
+    this.scroll();
   },
   async created() {
-    await this.getApis()
+    await this.getApis();
   },
   computed: {
     isMobile() {
@@ -157,61 +165,76 @@ export default {
     },
   },
   methods: {
-    scroll () {
+    scroll() {
       window.onscroll = () => {
-        let scrolledTo = document.querySelector('#prodRow')
+        let scrolledTo = document.querySelector('#prodRow');
 
         if (scrolledTo && this.isScrolledIntoView(scrolledTo)) {
-          this.scrollItem = this.scrollItem + 12
-          this.rows = this.masterRows.slice(0, this.scrollItem)
+          this.scrollItem = this.scrollItem + 12;
+          this.rows = this.masterRows.slice(0, this.scrollItem);
         }
-      }
+      };
     },
-    isScrolledIntoView (el) {
-      let rect = el.getBoundingClientRect()
-      let elemTop = rect.top
-      let elemBottom = rect.bottom
+    isScrolledIntoView(el) {
+      let rect = el.getBoundingClientRect();
+      let elemTop = rect.top;
+      let elemBottom = rect.bottom;
 
-      let isVisible = elemTop < window.innerHeight && elemBottom >= 0
-      return isVisible
+      let isVisible = elemTop < window.innerHeight && elemBottom >= 0;
+      return isVisible;
     },
     async selectItem(id) {
-      this.$router.push({ name: "details", params: { id } });
+      this.$router.push({ name: 'details', params: { id } });
     },
     async setData(data) {
       console.log('==>', data);
-      data.map((x) => (x.images = JSON.parse(x.images)));
+      let idx = 1;
+      data.map((x) => {
+        x.images = JSON.parse(x.images);
+        x.badgeStatus = null;
+        x.badgeColor = null;
+        if (x.priceB) {
+          x.badgeStatus = 'SALE';
+          x.badgeColor = 'red';
+        }
+        if (idx < 13) {
+          x.badgeStatus = 'NEW';
+          x.badgeColor = 'blue';
+        }
+        idx++;
+        return x;
+      });
       this.masterRows = data;
       this.rows = this.masterRows.slice(0, 12);
       console.log('this.rows', this.rows);
     },
     async getApis() {
-      this.busy = true
+      this.busy = true;
       try {
-        let res = await this.$http.get('/stock/get-stock')
-        this.setData(res.data.items)
-        this.categoryItem = this.$store.state.settings.categoryItem
-        this.carouselItem = this.$store.state.settings.carouselItem
+        let res = await this.$http.get('/stock/get-stock');
+        this.setData(res.data.items);
+        this.categoryItem = this.$store.state.settings.categoryItem;
+        this.carouselItem = this.$store.state.settings.carouselItem;
       } catch (error) {
-        console.log('ERR', error)
+        console.log('ERR', error);
       } finally {
-        this.busy = false
+        this.busy = false;
       }
     },
     async changePage(at) {
-      let from = 0
-      let to = 9
+      let from = 0;
+      let to = 9;
       if (at === 'right') {
-        this.page++
+        this.page++;
       } else {
-        this.page--
+        this.page--;
       }
-      from = (to * this.page) - 8
-      to = to * this.page
+      from = to * this.page - 8;
+      to = to * this.page;
       if (this.page === 1) {
-        from = 0
+        from = 0;
       }
-      this.rows = this.masterRows.slice(from, to)
+      this.rows = this.masterRows.slice(from, to);
     },
   },
 };
