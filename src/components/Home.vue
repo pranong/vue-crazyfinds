@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <loader v-if="busy"/>
     <!-- Carousel -->
     <v-row>
       <v-carousel cycle width="100%" show-arrows-on-hover hide-delimiter-background>
@@ -155,16 +156,19 @@
 
 <script>
   import MarqueeText from "../components/MarqueeText.vue";
+  import loader from './loader.vue'
   export default {
     name: 'Home',
     components: {
       MarqueeText,
+      loader,
     },
     data() {
       return {
         carouselItem: [],
         rows: [],
         masterRows: [],
+        busy: false,
       }
     },
     created() {
@@ -196,6 +200,7 @@
         this.$router.push({ name: "details", params: { id } });
       },
       async getApis() {
+        this.busy = true
         try {
           let res = await this.$http.get('/stock/get-stock')
           this.setData(res.data.items)
@@ -206,6 +211,8 @@
           console.log('data', data)
         } catch (error) {
           console.log('ERR', error)
+        } finally {
+          this.busy = false
         }
       },
     }
