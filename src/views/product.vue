@@ -24,12 +24,12 @@
             <template v-if="row.badgeStatus" v-slot:badge>
               {{ row.badgeStatus }}
             </template>
-            <router-link :to="`../details/${row.stkId}`">
               <v-carousel
                 hide-delimiters
                 :width="isMobile ? 150 : 250"
                 :height="isMobile ? 150 : 250"
               >
+                <router-link :to="`../details/${row.stkId}`">
                 <v-carousel-item
                   v-for="(item, i) in row.images"
                   :key="i"
@@ -38,8 +38,8 @@
                   :width="isMobile ? 150 : 250"
                   eager
                 ></v-carousel-item>
+                </router-link>
               </v-carousel>
-            </router-link>
           </v-badge>
           <v-row class="pl-5 pr-5 pt-1">
             <v-col
