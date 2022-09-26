@@ -1,92 +1,122 @@
 <template>
   <v-container>
     <loader v-show="busy"/>
-    <v-row class="text-center">
-      <v-col cols="12">
-        <v-img
+    <v-row>
+      <v-col 
+          lg="8"
+          sm="12"
+          md="8">
+        <center>
+          <v-img
           :src="require('../assets/logo.svg')"
           class="my-3"
-          contain
-          height="200"
-        />
+          width="500"/>
+        </center>
       </v-col>
-      {{ $route.params }}
-
-      <v-col class="mb-4">
-        <h1 class="display-2 font-weight-bold mb-3">Welcome to Vuetify</h1>
-
-        <p class="subheading font-weight-regular">
-          For help and collaboration with other Vuetify developers,
-          <br />please join our online
-          <a href="https://community.vuetifyjs.com" target="_blank"
-            >Discord Community</a
-          >
-        </p>
-      </v-col>
-
-      <v-col class="mb-5" cols="12">
-        <h2 class="headline font-weight-bold mb-3">What's next?</h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(next, i) in whatsNext"
-            :key="i"
-            :href="next.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ next.text }}
-          </a>
+      <v-col
+          lg="4"
+          sm="12"
+          md="4">
+        <v-row>
+            <v-breadcrumbs :items="breadcrumbsItems"></v-breadcrumbs>
+        </v-row>
+        <v-row>
+          <v-col>
+            <h3>{{ `${form.name}-${form.size}` }}</h3>
+            <a>hookups</a>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col col="6">
+            <h3>$ {{form.priceA}}</h3>
+          </v-col>
+          <v-col col="6" class="text-center">
+            <v-text-field
+              type="number"
+              v-model="form.qty"
+              label="Quantity"
+              style="width: 50px;"
+              required
+              :disabled="form.qty<2"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-divider class="mx-4"></v-divider>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            {{ form.description }}
+          </v-col>
+           </v-row>
+        <v-row>
+          <v-col>
+            <v-divider class="mx-4"></v-divider>
+          </v-col>
+        </v-row>
+        <v-row align="center" justify="center">
+          <v-btn class="mt-5 mb-5 cart-btn"> Add to cart </v-btn>
+        </v-row>
+        <v-row align="center" justify="center">
+          <PayPal
+            amount="10.00"
+            currency="USD"
+            :client="ppCredential"
+            :button-style="myStyle"
+            env="sandbox">
+          </PayPal>
         </v-row>
       </v-col>
-
-      <v-col class="mb-5" cols="12">
-        <h2 class="headline font-weight-bold mb-3">Important Links</h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(link, i) in importantLinks"
-            :key="i"
-            :href="link.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ link.text }}
-          </a>
-        </v-row>
-      </v-col>
-
-      <v-col class="mb-5" cols="12">
-        <h2 class="headline font-weight-bold mb-3">Ecosystem</h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(eco, i) in ecosystem"
-            :key="i"
-            :href="eco.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ eco.text }}
-          </a>
-        </v-row>
-      </v-col>
+      
     </v-row>
   </v-container>
 </template>
 
 <script>
 import loader from '../components/loader.vue'
+import PayPal from 'vue-paypal-checkout'
 
 export default {
   name: 'Details',
 
   components: {
-    loader
+    loader,
+    PayPal
   },
   data() {
     return {
       busy: false,
+      qty: 1,
+      form: {},
+      ppCredential: {
+        sandbox: '<sandbox client id>',
+        production: '<production client id>'
+      },
+      myStyle: {
+        label: "checkout",
+        size: "large",
+        shape: "rect",
+        color: "silver"
+      },
+      breadcrumbsItems: [
+        {
+          text: 'Dashboard',
+          disabled: false,
+          href: 'breadcrumbs_dashboard',
+        },
+        {
+          text: 'Link 1',
+          disabled: false,
+          href: 'breadcrumbs_link_1',
+        },
+        {
+          text: 'Link 2',
+          disabled: true,
+          href: 'breadcrumbs_link_2',
+        },
+      ],
     };
   },
   created() {
@@ -101,14 +131,30 @@ export default {
     async getStock(stkId){
       this.busy = true
       try {
-        let res = await this.$http.get('/stock/get-stock')
-        console.log('res', res)
+        // let res = await this.$http.get('/stock/get-stock')
+        let { data } = await this.$http.post('/stock/get-stock-item', {stkId})
+        let item = data.items
+        if (!item) {
+          throw new Error('No value')
+        }
+        this.form = item
+        console.log('this.form', this.form)
       } catch (error) {
-        
+        console.log(error)
       } finally {
         this.busy = false
       }
-    }
+    },
   },
 };
 </script>
+
+<style lang="sass">
+.cart-btn
+  min-width: 350px !important
+  min-height: 50px !important
+  background-color: black !important
+  color: white !important
+  border-radius: 0px !important
+</style>
+  
