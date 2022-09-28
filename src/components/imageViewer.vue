@@ -1,28 +1,42 @@
 <template>
-  <div class="page-loader">
-    <div class="zoom-in-out-box">
-      <img height="30" :src="require('../assets/logo.png')" />
-      <!-- src="https://cdn.shopify.com/s/files/1/0016/4013/6813/files/logo_3c33f7b3-489a-4f17-be41-28a6d3ff2260_180x.png?v=1652131245"/> -->
+  <div class="page-image-viewer">
+    <div v-for="(item, i) in images" :key="i">
+      <img class="" :src="item.src" v-if="item.isSelected" />
     </div>
+    <v-btn fab fixed right top medium @click="onExit">
+      <v-icon>mdi-close</v-icon>
+    </v-btn>
   </div>
 </template>
 
 <script>
 export default {
   name: 'loader',
-
+  props: {
+    images: Array,
+    now: Number,
+  },
   data() {
-    return {};
+    return {
+      nowId: 0,
+    };
   },
 
-  mounted() {},
+  mounted() {
+    console.log('images', this.images, 'now', this.now);
+    this.nowId = this.now;
+  },
 
-  methods: {},
+  methods: {
+    onExit() {
+      this.$emit('exit', this.nowId);
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.page-loader {
+.page-image-viewer {
   display: flex;
   justify-content: center;
   align-items: center;
