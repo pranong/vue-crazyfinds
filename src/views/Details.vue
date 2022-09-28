@@ -5,8 +5,8 @@
       <v-col 
           lg="8"
           sm="12"
-          md="8"
-          style="overflow-y: auto;">
+          xs="12"
+          md="8">
         <center>
           <v-carousel
             v-model="currentIndex"
@@ -34,6 +34,7 @@
       <v-col
           style="height: 100%;position: sticky;top: 118px"
           lg="4"
+          xs="12"
           sm="12"
           md="4">
         <v-row>
