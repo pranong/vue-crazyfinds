@@ -125,7 +125,7 @@
         <v-container class="pa-0 productItem" cols="12">
           <v-badge color="#BDBDBD" tile overlap offset-x="29" offset-y="25">
             <template v-slot:badge> Sale </template>
-            <router-link :to="`product/${row.code}`">
+            <router-link :to="`product/${JSON.stringify({type: row.code})}`">
               <v-carousel
                 hide-delimiters
                 :width="isMobile ? 150 : 250"
@@ -216,7 +216,7 @@ export default {
     async getApis() {
       this.busy = true
       try {
-        let res = await this.$http.get('/stock/get-stock')
+        let res = await this.$http.post('/stock/get-stock')
         this.setData(res.data.items)
         this.categoryItem = this.$store.state.settings.categoryItem
         this.carouselItem = this.$store.state.settings.carouselItem

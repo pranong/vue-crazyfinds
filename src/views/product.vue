@@ -211,7 +211,9 @@ export default {
     async getApis() {
       this.busy = true;
       try {
-        let res = await this.$http.get('/stock/get-stock');
+        let param = JSON.parse(this.$route.params.filter)
+        console.log(param)
+        let res = await this.$http.post('/stock/get-stock', param);
         this.setData(res.data.items);
         this.categoryItem = this.$store.state.settings.categoryItem;
         this.carouselItem = this.$store.state.settings.carouselItem;

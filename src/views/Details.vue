@@ -22,7 +22,7 @@
             <v-img :src="item.src" aspect-ratio="1" :alt="item.src"/>
             </v-carousel-item>
           </v-carousel>
-          <v-sheet class="mx-auto" max-width="100%">
+          <v-sheet class="mx-auto mt-4" max-width="100%">
             <v-slide-group multiple show-arrows v-model="currentIndex">
               <v-slide-item v-for="(n, i) in form.images" :key="i">
                 <v-img :src="n.src" :style="n.isSelected ? `opacity: 1` : `opacity: 0.5`" class="ma-4" height="100" width="100" @click="selectImg(n.id)"/>
@@ -78,7 +78,7 @@
         <v-row align="center" justify="center">
           <v-btn class="mt-5 mb-5 cart-btn"> Add to cart </v-btn>
         </v-row>
-        <v-row align="center" justify="center">
+        <!-- <v-row align="center" justify="center"> -->
           <PayPal
             amount="10.00"
             currency="USD"
@@ -86,7 +86,7 @@
             :button-style="myStyle"
             env="sandbox">
           </PayPal>
-        </v-row>
+        <!-- </v-row> -->
       </v-col>
     </v-row>
 
@@ -180,7 +180,7 @@ export default {
       categoryItem: [],
       myStyle: {
         label: "checkout",
-        size: "large",
+        size: "responsive",
         shape: "rect",
         color: "silver"
       },
@@ -259,11 +259,11 @@ export default {
 
 <style lang="sass">
 .cart-btn
-  min-width: 350px !important
+  min-width: 94% !important
   min-height: 50px !important
   background-color: black !important
   color: white !important
-  border-radius: 0px !important
+  border-radius: 5px !important
 .v-carousel-item
   position: absolute
   left: 0

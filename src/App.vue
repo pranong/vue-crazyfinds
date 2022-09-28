@@ -60,6 +60,7 @@
             prepend-inner-icon="mdi-magnify"
             @focus="searchClosed = false"
             @blur="searchClosed = true"
+            @keydown.enter="doSearch()"
             v-model="searchData"
             enterkeyhint="go"
             flat
@@ -228,7 +229,20 @@ export default {
       }
     },
   },
-  methods: {},
+  methods: {
+    doSearch() {
+      console.log('search jaaa')
+      console.log('this.$route.path', this.$route.path)
+      if (this.$route.path.includes('product')) location.reload();
+      this.$router.push({ path: `../product/${JSON.stringify({query: this.searchData})}`,}).catch(error => {
+        if (error.name != 'NavigationDuplicated') {
+          throw error;
+        }
+      })
+      this.searchData = ''
+      this.searchClosed = true
+    }
+  },
 };
 </script>
 <style lang="sass">
