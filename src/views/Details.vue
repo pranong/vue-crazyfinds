@@ -32,6 +32,7 @@
         </center>
       </v-col>
       <v-col
+          style="height: 100%;position: sticky;top: 118px"
           lg="4"
           sm="12"
           md="4">
@@ -68,7 +69,7 @@
           <v-col>
             {{ form.description }}
           </v-col>
-           </v-row>
+        </v-row>
         <v-row>
           <v-col>
             <v-divider class="mx-4"></v-divider>

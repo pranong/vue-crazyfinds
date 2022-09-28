@@ -13,7 +13,7 @@
           v-for="(item, i) in carouselItem"
           :key="i"
           :src="item.src"
-          transition="fade-transition"
+          fade
         ></v-carousel-item>
       </v-carousel>
     </v-row>
