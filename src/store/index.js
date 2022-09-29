@@ -9,6 +9,28 @@ export default new Vuex.Store({
     testStore2: 'eieiStore2',
     categoryItem: [],
     carouselItem: [],
+    cartItem: [
+      {
+        stkId: 1,
+        name: '1990 Hook-ups Skateboard',
+        price: '150'
+      },
+      {
+        stkId: 2,
+        name: 'Samrall Co. Dexter Lab',
+        price: '150'
+      },
+      {
+        stkId: 3,
+        name: '1996 Blink-182',
+        price: '150'
+      },
+      {
+        stkId: 4,
+        name: '1990 MXPX',
+        price: '150'
+      },
+    ],
     settings: {},
   },
   getters: {
@@ -16,6 +38,13 @@ export default new Vuex.Store({
   mutations: {
     setSettings(state, param) {
       state.settings = param
+    },
+    addCart(state, param) {
+      state.cartItem.push(param)
+    },
+    removeCart(state, param) {
+      let idx = state.cartItem.findIndex(x => x.stkId = param.id)
+      state.cartItem.splice(idx, 1);
     }
   },
   actions: {

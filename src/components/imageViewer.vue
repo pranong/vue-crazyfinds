@@ -3,7 +3,7 @@
     <div v-for="(item, i) in images" :key="i">
       <img class="" :src="item.src" v-if="item.isSelected" />
     </div>
-    <v-btn fab fixed right top medium @click="onExit">
+    <v-btn fab fixed center bottom medium @click="onExit">
       <v-icon>mdi-close</v-icon>
     </v-btn>
   </div>

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <!-- Nav Bar -->
-    <v-app-bar :clipped-left="clipped" fixed extension-height="50">
+    <v-app-bar :clipped-left="clipped" fixed extension-height="50" app overflow-hidden>
       <!-- Marquee -->
       <v-container class="fill-height" >
         <v-carousel
@@ -72,14 +72,15 @@
           <v-badge
             bordered
             color="error"
-            :content="cart.length"
+            :content="cartItem.length"
             bottom
             overlap
             :offset-x="isMobile ? '20' : '70'"
             offset-y="25"
             :style="isMobile ? 'padding-left: 5px;' : 'padding-right: 50px;'"
           >
-            <v-btn icon>
+            <v-btn icon v-bind="attrs" v-on="on" 
+            @click.stop="drawer = !drawer">
               <v-icon>mdi-cart</v-icon>
             </v-btn>
           </v-badge>
@@ -153,6 +154,61 @@
         </v-toolbar>
       </template>
     </v-app-bar>
+    <v-navigation-drawer
+      v-model="drawer"
+      sticky
+      temporary
+      clipped
+      app
+      width="50%"
+    >
+      <v-list nav dense>
+        <v-list-item>
+          <v-list-item-avatar>
+            <img
+              src="https://cdn.vuetifyjs.com/images/john.jpg"
+              alt="John"
+            />
+          </v-list-item-avatar>
+
+          <v-list-item-content>
+            <v-list-item-title>John Leider</v-list-item-title>
+            <v-list-item-subtitle>Founder of Vuetify</v-list-item-subtitle>
+          </v-list-item-content>
+
+          <v-list-item-action>
+            <!-- <router-link to="/product">
+              <v-btn icon>
+                <v-icon color="grey lighten-1">mdi-heart</v-icon>
+              </v-btn>
+            </router-link> -->
+          </v-list-item-action>
+        </v-list-item>
+      </v-list>
+
+      <v-divider></v-divider>
+
+      <v-list v-for="item in cartItem" :key="item.stkId">
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.name }}</v-list-item-title>
+            <v-list-item-subtitle>{{ item.price }}</v-list-item-subtitle>
+          </v-list-item-content>
+          <v-list-item-action>
+            <v-btn icon>
+              <v-icon color="grey lighten-1" @click="$store.commit('removeCart',item)">mdi-delete</v-icon>
+            </v-btn>
+          </v-list-item-action>
+        </v-list-item>
+      </v-list>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+
+        <v-btn text @click.stop="drawer = !drawer"> Cancel </v-btn>
+        <v-btn color="primary" text @click.stop="drawer = !drawer"> Save </v-btn>
+      </v-card-actions>
+    </v-navigation-drawer>
     <!-- Body -->
     <v-main>
       <v-container class="pt-4">
@@ -228,6 +284,12 @@ export default {
         return false;
       }
     },
+    cartItem() {
+      return this.$store.state.cartItem
+    },
+    cartItemLength() {
+      return this.$store.state.cartItem.length
+    }
   },
   methods: {
     doSearch() {

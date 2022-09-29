@@ -13,6 +13,7 @@
             <v-carousel-item v-for="(item, i) in form.images" :key="i" fade>
               <v-img
                 :src="item.src"
+                class="productItem"
                 aspect-ratio="1"
                 :alt="item.src"
                 @click="openViewer()"
@@ -25,7 +26,7 @@
                 <v-img
                   :src="n.src"
                   :style="n.isSelected ? `opacity: 1` : `opacity: 0.5`"
-                  class="ma-4"
+                  class="ma-4 productItem"
                   height="100"
                   width="100"
                   @click="selectImg(n.id)"
@@ -88,7 +89,7 @@
           </v-col>
         </v-row>
         <v-row align="center" justify="center">
-          <v-btn class="mt-5 mb-5 cart-btn"> Add to cart </v-btn>
+          <v-btn class="mt-5 mb-5 cart-btn" @click="addItemToCart(form)" :disabled="btnDisabled"> {{ isInCart ? 'Cart Added!' : 'Add to cart'}} </v-btn>
         </v-row>
         <!-- <v-row align="center" justify="center"> -->
         <PayPal
@@ -201,6 +202,8 @@ export default {
         shape: 'rect',
         color: 'silver',
       },
+      btnDisabled: false,
+      isInCart: false,
       breadcrumbsItems: [
         {
           text: 'Dashboard',
@@ -253,6 +256,11 @@ export default {
         item.images[0].isSelected = true;
         this.form = item;
         console.log('this.form', this.form);
+        // TODO: check in cart
+        let idx = this.$state.cartItem.findIndex(x => x.stkId = item.stkId)
+        if (idx) {
+          this.isInCart = true
+        }
       } catch (error) {
         console.log(error);
       } finally {
@@ -280,6 +288,11 @@ export default {
       this.selectImg(param + 1);
       this.showViewer = false;
     },
+    addItemToCart(item) {
+      this.$store.commit('addCart',item)
+      this.btnDisabled = true
+      this.isInCart = true
+    }
   },
 };
 </script>
@@ -297,4 +310,6 @@ export default {
   right: 0
   top: 0
   buttom: 0
+.productItem
+  cursor: pointer !important
 </style>
