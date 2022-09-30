@@ -89,7 +89,7 @@
           </v-col>
         </v-row>
         <v-row align="center" justify="center">
-          <v-btn class="mt-5 mb-5 cart-btn" @click="addItemToCart(form)" :disabled="btnDisabled"> {{ isInCart ? 'Cart Added!' : 'Add to cart'}} </v-btn>
+          <v-btn class="mt-5 mb-5 cart-btn" @click="addItemToCart(form)" :disabled="btnDisabled"> {{ isInCart ? 'Cart Added!' : form.status === 'X' ? 'Sold out!' : 'Add to cart'}} </v-btn>
         </v-row>
         <!-- <v-row align="center" justify="center"> -->
         <PayPal
@@ -98,6 +98,7 @@
           :client="ppCredential"
           :button-style="myStyle"
           env="sandbox"
+          v-if="!btnDisabled"
         >
         </PayPal>
         <!-- </v-row> -->
@@ -134,7 +135,7 @@
         <v-container class="pa-0 productItem" cols="12">
           <v-badge color="#BDBDBD" tile overlap offset-x="29" offset-y="25">
             <template v-slot:badge> Sale </template>
-            <router-link :to="`product/${row.code}`">
+            <router-link :to="`../product/${JSON.stringify({type: row.code})}`">
               <v-carousel
                 hide-delimiters
                 :width="isMobile ? 150 : 250"
@@ -142,9 +143,8 @@
                 :show-arrows="false"
               >
                 <v-carousel-item
-                  v-for="(item, i) in row.images"
                   :key="i"
-                  :src="item.src"
+                  :src="row.src"
                   :height="isMobile ? 150 : 250"
                   :width="isMobile ? 150 : 250"
                 ></v-carousel-item>
@@ -227,7 +227,23 @@ export default {
     console.log('details');
     this.getStock(this.$route.params.stkId);
     this.categoryItem = this.$store.state.settings.categoryItem;
-    // console.log("$route.params.id", this.$route.params.id);
+    console.log("this.categoryItem", this.categoryItem);
+  },
+  computed: {
+    isMobile() {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    cartItem() {
+      return this.$store.state.cartItem
+    },
   },
   activated() {
     console.log('details activated');
@@ -237,6 +253,21 @@ export default {
       console.log('this.currentIndex+1', this.currentIndex + 1);
       this.selectImg(this.currentIndex + 1);
     },
+    cartItem: async function() {
+      console.log('watch Cart Item')
+      if (this.isInCart) {
+        console.log('x1')
+        let idx = this.cartItem.findIndex(x => x.stkId === this.form.stkId)
+        console.log('x2', idx)
+        if (idx < 0){
+          this.isInCart = false
+        } else {
+          return
+        }
+        // check status stock from db
+        await this.getStock(this.form.stkId);
+      }
+    }
   },
   methods: {
     async getStock(stkId) {
@@ -256,10 +287,16 @@ export default {
         item.images[0].isSelected = true;
         this.form = item;
         console.log('this.form', this.form);
-        // TODO: check in cart
-        let idx = this.$state.cartItem.findIndex(x => x.stkId = item.stkId)
-        if (idx) {
+        let idx = this.cartItem.findIndex(x => x.stkId === item.stkId)
+        console.log('idx', idx)
+        if (idx >= 0) {
           this.isInCart = true
+          this.btnDisabled = true
+        }
+        if (item.status === 'X') {
+          this.btnDisabled = true
+        } else {
+          this.btnDisabled = false
         }
       } catch (error) {
         console.log(error);

@@ -36,20 +36,19 @@
           <!-- Title/logo -->
           <router-link to="/" style="padding-left: 50px;" v-if="!((!searchClosed || searchData) && isMobile)">
             <img
-              :class="{ hide: (!searchClosed || searchData) && isMobile }"
+              :class="{ hide: (!searchClosed || searchData) && isMobile, centerme: !isMobile }"
               class="mr-3"
-
-              src = "https://cdn.shopify.com/s/files/1/0016/4013/6813/files/logo_3c33f7b3-489a-4f17-be41-28a6d3ff2260_180x.png?v=1652131245"
-              width="150"
+              style="width: 50%; opacity: .85"
+              :src="require('./assets/logo.png')"
           /></router-link>
           <!-- :src="require('./assets/logo.png')" -->
-          <v-divider
+          <!-- <v-divider
             class="mx-4"
             v-if="!isMobile"
             vertical
-          ></v-divider>
+          ></v-divider> -->
 
-          <router-link v-if="!isMobile" to="/product/A" style="padding-left: 5px;">Shop</router-link>
+
           <v-spacer />
           
           <!-- search -->
@@ -73,13 +72,14 @@
             bordered
             color="error"
             :content="cartItem.length"
+            :value="cartItem.length > 0"
             bottom
             overlap
             :offset-x="isMobile ? '20' : '70'"
             offset-y="25"
             :style="isMobile ? 'padding-left: 5px;' : 'padding-right: 50px;'"
           >
-            <v-btn icon v-bind="attrs" v-on="on" 
+            <v-btn icon 
             @click.stop="drawer = !drawer">
               <v-icon>mdi-cart</v-icon>
             </v-btn>
@@ -196,7 +196,7 @@
           </v-list-item-content>
           <v-list-item-action>
             <v-btn icon>
-              <v-icon color="grey lighten-1" @click="$store.commit('removeCart',item)">mdi-delete</v-icon>
+              <v-icon color="grey lighten-1" @click="$store.commit('removeCart', item)">mdi-delete</v-icon>
             </v-btn>
           </v-list-item-action>
         </v-list-item>
@@ -212,7 +212,7 @@
     <!-- Body -->
     <v-main>
       <v-container class="pt-4">
-        <div style="padding-top: 100px;">
+        <div>
           <router-view />
         </div>
       </v-container>
@@ -321,6 +321,10 @@ export default {
         background: transparent !important
 .hide
   width: 0 !important
+.centerme
+  display: block
+  margin-left: 50%
+  transform: translate(-50%, 0)
 .v-toolbar__content, .v-toolbar__extension 
   padding: 0 !important
 

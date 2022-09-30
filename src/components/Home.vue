@@ -133,9 +133,8 @@
                 :show-arrows="false"
               >
                 <v-carousel-item
-                  v-for="(item, i) in row.images"
                   :key="i"
-                  :src="item.src"
+                  :src="row.src"
                   :height="isMobile ? 150 : 250"
                   :width="isMobile ? 150 : 250"
                 ></v-carousel-item>

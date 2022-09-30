@@ -9,41 +9,23 @@ export default new Vuex.Store({
     testStore2: 'eieiStore2',
     categoryItem: [],
     carouselItem: [],
-    cartItem: [
-      {
-        stkId: 1,
-        name: '1990 Hook-ups Skateboard',
-        price: '150'
-      },
-      {
-        stkId: 2,
-        name: 'Samrall Co. Dexter Lab',
-        price: '150'
-      },
-      {
-        stkId: 3,
-        name: '1996 Blink-182',
-        price: '150'
-      },
-      {
-        stkId: 4,
-        name: '1990 MXPX',
-        price: '150'
-      },
-    ],
+    cartItem: [],
     settings: {},
   },
   getters: {
   },
   mutations: {
     setSettings(state, param) {
+      console.log('param', param)
       state.settings = param
     },
     addCart(state, param) {
       state.cartItem.push(param)
     },
     removeCart(state, param) {
-      let idx = state.cartItem.findIndex(x => x.stkId = param.id)
+      console.log(param.stkId)
+      let idx = state.cartItem.findIndex(x => x.stkId === param.stkId)
+      console.log('idx store', idx)
       state.cartItem.splice(idx, 1);
     }
   },
