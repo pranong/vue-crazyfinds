@@ -296,7 +296,7 @@ export default {
       console.log('search jaaa')
       console.log('this.$route.path', this.$route.path)
       if (this.$route.path.includes('product')) location.reload();
-      this.$router.push({ path: `../product/${JSON.stringify({query: this.searchData})}`,}).catch(error => {
+      this.$router.push({ path: `../product/search?q=${this.searchData})}`}).catch(error => {
         if (error.name != 'NavigationDuplicated') {
           throw error;
         }

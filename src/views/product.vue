@@ -146,6 +146,7 @@ export default {
     };
   },
   mounted() {
+    console.log('this.$route.params')
     this.scroll();
   },
   async created() {
@@ -211,9 +212,9 @@ export default {
     async getApis() {
       this.busy = true;
       try {
-        let param = JSON.parse(this.$route.params.filter)
+        let param = this.$route.params.filter
         console.log(param)
-        let res = await this.$http.post('/stock/get-stock', param);
+        let res = await this.$http.post('/stock/get-stock', {data: param});
         this.setData(res.data.items);
         this.categoryItem = this.$store.state.settings.categoryItem;
         this.carouselItem = this.$store.state.settings.carouselItem;

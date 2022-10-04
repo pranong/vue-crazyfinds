@@ -1,15 +1,15 @@
 <template>
-  <hello-world />
+  <home />
 </template>
 
 <script>
-  import HelloWorld from '../components/Home'
+  import home from '../components/Home'
 
   export default {
     name: 'Home',
 
     components: {
-      HelloWorld,
+      home,
     },
   }
 </script>
