@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import HomeView from '../views/Home.vue';
 import details from '../views/Details.vue';
 import product from '../views/Product.vue';
+import cart from '../views/Cart.vue';
 
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
@@ -44,6 +45,10 @@ const routes = [
     name: 'details',
     component: details,
   },
+  {
+    path: '/cart',
+    component: cart
+  }
 ];
 
 const router = new VueRouter({
