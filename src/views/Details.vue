@@ -135,7 +135,7 @@
         <v-container class="pa-0 productItem" cols="12">
           <v-badge color="#BDBDBD" tile overlap offset-x="29" offset-y="25">
             <template v-slot:badge> Sale </template>
-            <router-link :to="`../product/${JSON.stringify({type: row.code})}`">
+            <router-link :to="`../product/${row.name}`">
               <v-carousel
                 hide-delimiters
                 :width="isMobile ? 150 : 250"
@@ -289,14 +289,14 @@ export default {
         console.log('this.form', this.form);
         let idx = this.cartItem.findIndex(x => x.stkId === item.stkId)
         console.log('idx', idx)
-        if (idx >= 0) {
-          this.isInCart = true
-          this.btnDisabled = true
-        }
         if (item.status === 'X') {
           this.btnDisabled = true
         } else {
           this.btnDisabled = false
+        }
+        if (idx >= 0) {
+          this.isInCart = true
+          this.btnDisabled = true
         }
       } catch (error) {
         console.log(error);
