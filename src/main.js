@@ -8,7 +8,7 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 
 const request = axios.create({
-	baseURL: process.env.VUE_APP_API_PATH || `http://localhost:8081/api`,
+  baseURL: process.env.VUE_APP_API_PATH || `http://localhost:8085/api`,
 })
 Vue.use(VueAxios, request)
 
