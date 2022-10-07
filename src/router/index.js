@@ -31,7 +31,7 @@ const routes = [
     component: Admin
   },
   {
-    path: '/product/:filter',
+    path: '/collection/:filter',
     name: 'Shop',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route

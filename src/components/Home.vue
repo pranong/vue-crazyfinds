@@ -125,7 +125,7 @@
         <v-container class="pa-0 productItem" cols="12">
           <v-badge color="#BDBDBD" tile overlap offset-x="29" offset-y="25">
             <template v-slot:badge> Sale </template>
-            <router-link :to="`product/${row.name}`">
+            <router-link :to="`collection/${row.name}`">
               <v-carousel
                 hide-delimiters
                 :width="isMobile ? 150 : 250"

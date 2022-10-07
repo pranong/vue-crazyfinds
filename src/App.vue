@@ -32,22 +32,83 @@
       </v-container>
       <!-- Nav bar -->
       <template #extension>
-        <v-toolbar>
-          <!-- Title/logo -->
-          <router-link to="/" style="padding-left: 50px;" v-if="!((!searchClosed || searchData) && isMobile)">
-            <img
-              :class="{ hide: (!searchClosed || searchData) && isMobile, centerme: !isMobile }"
-              class="mr-3"
-              style="width: 50%; opacity: .85"
-              :src="require('./assets/logo.png')"
-          /></router-link>
-          <!-- :src="require('./assets/logo.png')" -->
-          <!-- <v-divider
-            class="mx-4"
-            v-if="!isMobile"
-            vertical
-          ></v-divider> -->
+        <v-toolbar class="px-8">
+          <!-- Dropdown btn -->
+          <v-menu transition="slide-y-transition" offset-y bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon>mdi-chevron-down</v-icon>
+              </v-btn>
+            </template>
+            <v-card class="mt-1">
+              <v-list>
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <img
+                      src="https://cdn.vuetifyjs.com/images/john.jpg"
+                      alt="John"
+                    />
+                  </v-list-item-avatar>
 
+                  <v-list-item-content>
+                    <v-list-item-title>John Leider</v-list-item-title>
+                    <v-list-item-subtitle>Founder of Vuetify</v-list-item-subtitle>
+                  </v-list-item-content>
+
+                  <v-list-item-action>
+                    <router-link to="/collection">
+                      <v-btn>
+                        <v-icon>mdi-heart</v-icon>
+                      </v-btn>
+                    </router-link>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
+
+              <v-divider></v-divider>
+
+              <v-list>
+                <v-list-item>
+                  <v-list-item-action>
+                    <v-switch color="purple"></v-switch>
+                  </v-list-item-action>
+                  <v-list-item-title>Enable messages</v-list-item-title>
+                </v-list-item>
+
+                <v-list-item>
+                  <v-list-item-action>
+                    <v-switch color="purple"></v-switch>
+                  </v-list-item-action>
+                  <v-list-item-title>Enable hints</v-list-item-title>
+                </v-list-item>
+              </v-list>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn text @click="menu = false"> Cancel </v-btn>
+                <v-btn color="primary" text @click="menu = false"> Save </v-btn>
+              </v-card-actions>
+            </v-card>
+
+            <!-- <v-list>
+              <v-list-item v-for="(item, i) in items" :key="i">
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list> -->
+          </v-menu>
+
+          <v-spacer />
+
+          <!-- Title/logo -->
+            <!-- <router-link to="/" style="" v-if="!((!searchClosed || searchData) && isMobile)"> -->
+              <v-img
+                :class="{ hide: (!searchClosed || searchData) && isMobile, centerme: !isMobile }"
+                class="mx-4"
+                style="width: 50%; opacity: .85"
+                :src="require('./assets/logo.png')"
+            />
+          <!-- </router-link> -->
 
           <v-spacer />
           
@@ -77,80 +138,12 @@
             overlap
             :offset-x="isMobile ? '20' : '70'"
             offset-y="25"
-            :style="isMobile ? 'padding-left: 5px;' : 'padding-right: 50px;'"
           >
             <v-btn icon 
             @click.stop="drawer = !drawer">
               <v-icon>mdi-cart</v-icon>
             </v-btn>
           </v-badge>
-  
-          <!-- Dropdown btn -->
-          <div style="padding-right: 10px;" v-if="isMobile">
-            <v-menu transition="slide-y-transition" offset-y bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" v-on="on">
-                  <v-icon>mdi-chevron-down</v-icon>
-                </v-btn>
-              </template>
-              <v-card class="mt-1">
-                <v-list>
-                  <v-list-item>
-                    <v-list-item-avatar>
-                      <img
-                        src="https://cdn.vuetifyjs.com/images/john.jpg"
-                        alt="John"
-                      />
-                    </v-list-item-avatar>
-
-                    <v-list-item-content>
-                      <v-list-item-title>John Leider</v-list-item-title>
-                      <v-list-item-subtitle>Founder of Vuetify</v-list-item-subtitle>
-                    </v-list-item-content>
-
-                    <v-list-item-action>
-                      <router-link to="/product">
-                        <v-btn>
-                          <v-icon>mdi-heart</v-icon>
-                        </v-btn>
-                      </router-link>
-                    </v-list-item-action>
-                  </v-list-item>
-                </v-list>
-
-                <v-divider></v-divider>
-
-                <v-list>
-                  <v-list-item>
-                    <v-list-item-action>
-                      <v-switch color="purple"></v-switch>
-                    </v-list-item-action>
-                    <v-list-item-title>Enable messages</v-list-item-title>
-                  </v-list-item>
-
-                  <v-list-item>
-                    <v-list-item-action>
-                      <v-switch color="purple"></v-switch>
-                    </v-list-item-action>
-                    <v-list-item-title>Enable hints</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-
-                  <v-btn text @click="menu = false"> Cancel </v-btn>
-                  <v-btn color="primary" text @click="menu = false"> Save </v-btn>
-                </v-card-actions>
-              </v-card>
-
-              <!-- <v-list>
-                <v-list-item v-for="(item, i) in items" :key="i">
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item>
-              </v-list> -->
-            </v-menu>
-          </div>
         </v-toolbar>
       </template>
     </v-app-bar>
@@ -177,7 +170,7 @@
           </v-list-item-content>
 
           <v-list-item-action>
-            <!-- <router-link to="/product">
+            <!-- <router-link to="/collection">
               <v-btn icon>
                 <v-icon color="grey lighten-1">mdi-heart</v-icon>
               </v-btn>
@@ -295,8 +288,8 @@ export default {
     doSearch() {
       console.log('search jaaa')
       console.log('this.$route.path', this.$route.path)
-      if (this.$route.path.includes('product')) location.reload();
-      this.$router.push({ path: `../product/search?q=${this.searchData})}`}).catch(error => {
+      if (this.$route.path.includes('collection')) location.reload();
+      this.$router.push({ path: `../collection/search?q=${this.searchData})}`}).catch(error => {
         if (error.name != 'NavigationDuplicated') {
           throw error;
         }
@@ -308,6 +301,14 @@ export default {
 };
 </script>
 <style lang="sass">
+.my-nav
+  position: fixed
+  top: 0
+  width: 100%
+  padding-top: 20px
+  padding-bottom: 20px
+  text-align: center
+  z-index: 999
 .v-input.expanding-search
   transition: max-width 0.4s
   max-width: 500px
