@@ -215,6 +215,7 @@ export default {
     async getApis() {
       this.busy = true
       try {
+        await this.$store.dispatch('setSettings')
         let res = await this.$http.post('/stock/get-stock')
         this.setData(res.data.items)
         this.categoryItem = this.$store.state.settings.categoryItem

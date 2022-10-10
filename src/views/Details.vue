@@ -273,6 +273,7 @@ export default {
     async getStock(stkId) {
       this.busy = true;
       try {
+        await this.$store.dispatch('setSettings')
         // let res = await this.$http.get('/stock/get-stock')
         let { data } = await this.$http.post('/stock/get-stock-item', {
           stkId,
