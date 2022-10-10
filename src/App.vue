@@ -102,12 +102,16 @@
 
           <!-- Title/logo -->
             <!-- <router-link to="/" style="" v-if="!((!searchClosed || searchData) && isMobile)"> -->
-              <v-img
-                :class="{ hide: (!searchClosed || searchData) && isMobile, centerme: !isMobile }"
-                class="mx-4"
-                style="width: 50%; opacity: .85"
-                :src="require('./assets/logo.png')"
-            />
+              <v-avatar :tile="true">
+                <v-img
+                  :class="{ hide: (!searchClosed || searchData) && isMobile}"
+                  class="mx-4"
+                  style="opacity: .85"
+                  height="40"
+
+                  :src="require('./assets/logo.png')"
+                />
+              </v-avatar>
           <!-- </router-link> -->
 
           <v-spacer />
@@ -263,7 +267,7 @@ export default {
   },
   async created() {
     // set setting to store
-    await this.$store.dispatch('setSettings')
+    // await this.$store.dispatch('setSettings')
   },
   computed: {
     isMobile() {
